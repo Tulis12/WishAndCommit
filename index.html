@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WishAndCommit</title>
+
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+        body {
+            font-family: "Roboto", Arial, Helvetica, sans-serif;
+        }
+
+        .controls {
+            width: 25%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .projects {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+
+            width: 100%;
+        }
+
+        .projects>label {
+            display: flex;
+            justify-content: space-between;
+            width: 50%;
+        }
+
+        .controls {
+            width: 100%;
+        }
+
+        .controls>label {
+            width: 100%;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .center {
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .smol-input {
+            width: 10%;
+        }
+
+        .ultra-smol-input {
+            width: 7.5%;
+        }
+
+        .month-calendars {
+            display: flex;
+            flex-direction: row;
+            gap: 50px;
+
+            flex: 3;
+
+            justify-content: center;
+            align-items: center;
+
+            flex-wrap: wrap;
+        }
+
+        body>div {
+            /*width: 100%;*/
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 95vh;
+            margin: 0;
+        }
+
+        .settings {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 15px;
+        }
+
+        .month {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+            border-radius: 15px;
+
+            background-color: #cdc8d6;
+            width: max(15%, 300px);
+            height: 300px;
+            padding: 15px;
+        }
+
+        .month table {
+            width: 100%;
+            height: 75%;
+        }
+
+        .month td {
+            text-align: center;
+            width: calc(187.5px / 5);
+            padding: 0;
+            aspect-ratio: 1;
+
+            line-height: calc(187.5px / 5);
+        }
+
+        .star {
+            background: gold;
+            clip-path: polygon(50% 0%,
+                    61% 35%,
+                    98% 35%,
+                    68% 57%,
+                    79% 91%,
+                    50% 70%,
+                    21% 91%,
+                    32% 57%,
+                    2% 35%,
+                    39% 35%);
+        }
+
+        .unreached {
+            border-radius: 100%;
+            background-color: #c1bec4;
+        }
+
+        .reached {
+            border-radius: 100%;
+            background-color: greenyellow;
+        }
+
+        .crushed {
+            border-radius: 100%;
+            background-color: lightseagreen;
+        }
+
+        .estimate {
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+
+            color: black;
+            padding: 5px !important;
+
+            border-radius: 100%;
+
+            background:
+                linear-gradient(45deg, #b3b1b5 25%, transparent 25%),
+                linear-gradient(-45deg, #b3b1b5 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #b3b1b5 75%),
+                linear-gradient(-45deg, transparent 75%, #b3b1b5 75%);
+            background-size: 8px 8px;
+            background-position:
+                0 0,
+                0 4px,
+                4px -4px,
+                -4px 0px;
+
+            border: 1px solid #999;
+        }
+
+        .legend ul {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 75%;
+        }
+
+        .legend>ul>li {
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend>ul>li::before {
+            content: "-";
+            margin-right: 10px;
+        }
+
+        .legend>ul>li>span {
+            display: block;
+            width: 20px;
+            height: 20px;
+
+            text-align: center;
+        }
+
+        .blur {
+            filter: blur(4px);
+        }
+
+        .blur:focus-visible {
+            filter: none;
+        }
+
+        .blur:hover {
+            filter: none;
+        }
+
+        footer {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        a {
+            color: black;
+        }
+
+        a:visited {
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="month-calendars">
+            <div class="month">
+                <p class="month-name">June</p>
+                <table class="moth-calendar">
+                    <tbody>
+                        <tr>
+                            <td class="tdm">Mon</td>
+                            <td class="tdm">Tue</td>
+                            <td class="tdm">Wed</td>
+                            <td class="tdm">Thu</td>
+                            <td class="tdm">Fri</td>
+                            <td class="tdm">Sat</td>
+                            <td class="tdm">Sun</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="06-01">1</td>
+                            <td id="06-02">2</td>
+                            <td id="06-03">3</td>
+                            <td id="06-04">4</td>
+                            <td id="06-05">5</td>
+                            <td id="06-06">6</td>
+                            <td id="06-07">7</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="06-08">8</td>
+                            <td id="06-09">9</td>
+                            <td id="06-10">10</td>
+                            <td id="06-11">11</td>
+                            <td id="06-12">12</td>
+                            <td id="06-13">13</td>
+                            <td id="06-14">14</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="06-15">15</td>
+                            <td id="06-16">16</td>
+                            <td id="06-17">17</td>
+                            <td id="06-18">18</td>
+                            <td id="06-19">19</td>
+                            <td id="06-20">20</td>
+                            <td id="06-21">21</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="06-22">22</td>
+                            <td id="06-23">23</td>
+                            <td id="06-24">24</td>
+                            <td id="06-25">25</td>
+                            <td id="06-26">26</td>
+                            <td id="06-27">27</td>
+                            <td id="06-28">28</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="06-29">29</td>
+                            <td id="06-30">30</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr class="trm"></tr>
+                        <tr class="trm"></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="month">
+                <p class="month-name">July</p>
+                <table class="month-calendar">
+                    <tbody>
+                        <!-- this has been generated by my other project -->
+                        <tr>
+                            <td class="tdm">Mon</td>
+                            <td class="tdm">Tue</td>
+                            <td class="tdm">Wed</td>
+                            <td class="tdm">Thu</td>
+                            <td class="tdm">Fri</td>
+                            <td class="tdm">Sat</td>
+                            <td class="tdm">Sun</td>
+                        </tr>
+
+                        <tr class="trm">
+                            <td></td>
+                            <td></td>
+                            <td id="07-01">1</td>
+                            <td id="07-02">2</td>
+                            <td id="07-03">3</td>
+                            <td id="07-04">4</td>
+                            <td id="07-05">5</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="07-06">6</td>
+                            <td id="07-07">7</td>
+                            <td id="07-08">8</td>
+                            <td id="07-09">9</td>
+                            <td id="07-10">10</td>
+                            <td id="07-11">11</td>
+                            <td id="07-12">12</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="07-13">13</td>
+                            <td id="07-14">14</td>
+                            <td id="07-15">15</td>
+                            <td id="07-16">16</td>
+                            <td id="07-17">17</td>
+                            <td id="07-18">18</td>
+                            <td id="07-19">19</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="07-20">20</td>
+                            <td id="07-21">21</td>
+                            <td id="07-22">22</td>
+                            <td id="07-23">23</td>
+                            <td id="07-24">24</td>
+                            <td id="07-25">25</td>
+                            <td id="07-26">26</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="07-27">27</td>
+                            <td id="07-28">28</td>
+                            <td id="07-29">29</td>
+                            <td id="07-30">30</td>
+                            <td id="07-31">31</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="month">
+                <p class="month-name">August</p>
+                <table class="month-calendar">
+                    <tbody>
+                        <tr>
+                            <td class="tdm">Mon</td>
+                            <td class="tdm">Tue</td>
+                            <td class="tdm">Wed</td>
+                            <td class="tdm">Thu</td>
+                            <td class="tdm">Fri</td>
+                            <td class="tdm">Sat</td>
+                            <td class="tdm">Sun</td>
+                        </tr>
+
+                        <tr class="trm">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td id="08-01">1</td>
+                            <td id="08-02">2</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="08-03">3</td>
+                            <td id="08-04">4</td>
+                            <td id="08-05">5</td>
+                            <td id="08-06">6</td>
+                            <td id="08-07">7</td>
+                            <td id="08-08">8</td>
+                            <td id="08-09">9</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="08-10">10</td>
+                            <td id="08-11">11</td>
+                            <td id="08-12">12</td>
+                            <td id="08-13">13</td>
+                            <td id="08-14">14</td>
+                            <td id="08-15">15</td>
+                            <td id="08-16">16</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="08-17">17</td>
+                            <td id="08-18">18</td>
+                            <td id="08-19">19</td>
+                            <td id="08-20">20</td>
+                            <td id="08-21">21</td>
+                            <td id="08-22">22</td>
+                            <td id="08-23">23</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="08-24">24</td>
+                            <td id="08-25">25</td>
+                            <td id="08-26">26</td>
+                            <td id="08-27">27</td>
+                            <td id="08-28">28</td>
+                            <td id="08-29">29</td>
+                            <td id="08-30">30</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="08-31">31</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="month">
+                <p class="month-name">September</p>
+                <table class="month-calendar">
+                    <tbody>
+                        <tr>
+                            <td class="tdm">Mon</td>
+                            <td class="tdm">Tue</td>
+                            <td class="tdm">Wed</td>
+                            <td class="tdm">Thu</td>
+                            <td class="tdm">Fri</td>
+                            <td class="tdm">Sat</td>
+                            <td class="tdm">Sun</td>
+                        </tr>
+
+                        <tr class="trm">
+                            <td></td>
+                            <td id="09-01">1</td>
+                            <td id="09-02">2</td>
+                            <td id="09-03">3</td>
+                            <td id="09-04">4</td>
+                            <td id="09-05">5</td>
+                            <td id="09-06">6</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="09-07">7</td>
+                            <td id="09-08">8</td>
+                            <td id="09-09">9</td>
+                            <td id="09-10">10</td>
+                            <td id="09-11">11</td>
+                            <td id="09-12">12</td>
+                            <td id="09-13">13</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="09-14">14</td>
+                            <td id="09-15">15</td>
+                            <td id="09-16">16</td>
+                            <td id="09-17">17</td>
+                            <td id="09-18">18</td>
+                            <td id="09-19">19</td>
+                            <td id="09-20">20</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="09-21">21</td>
+                            <td id="09-22">22</td>
+                            <td id="09-23">23</td>
+                            <td id="09-24">24</td>
+                            <td id="09-25">25</td>
+                            <td id="09-26">26</td>
+                            <td id="09-27">27</td>
+                        </tr>
+                        <tr class="trm">
+                            <td id="09-28">28</td>
+                            <td id="09-29">29</td>
+                            <td id="09-30">30</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="settings">
+            <span id="estimated_hours"></span>
+
+            <div class="projects">
+
+            </div>
+
+            <div class="controls">
+                <label>
+                    Your ID on slack/hackclub ID:
+                    <input class="blur" id="hackatime_id" type="text">
+                </label>
+
+                <label>
+                    Hackatime compatible URL:
+                    <input id="hackatime_url" type="url">
+                </label>
+                <small>(leave it alone if you're just for stardance)</small>
+
+                <br>
+
+                <label>
+                    You code for at least:
+                    <input class="smol-input" id="minimum_daily_minutes" type="number">
+                    minutes daily
+                </label>
+
+                <label>
+                    You already have:
+                    <input class="smol-input" id="additional_stardust" type="number">
+                    stardust
+                </label>
+                <small> (please unselect all projects earned from it)</small>
+
+                <br>
+
+                <label>
+                    Your goal name:
+                    <input id="goal_name" type="text">
+                </label>
+
+                <label>
+                    Your goal:
+                    <input class="smol-input" id="goal_stardust" type="number" />
+                    stardust
+                </label>
+
+                <label>
+                    Your expected payout per hour:
+                    <input class="ultra-smol-input" id="estimate_stardust" type="number" />
+                    stardust / h
+                </label>
+
+                <div class="center">
+                    <button onclick="saveControls();">Save</button>
+                    <button id="update_today" onclick="updateToday();" disabled>Update Today</button>
+                    <button id="update_all_time" onclick="fetchAllData().then(() => {window.location.reload()});"
+                        disabled>Update All Time (long)</button>
+                </div>
+
+                <span class="info"></span>
+
+                <div class="legend">
+                    <ul>
+                        <li>
+                            <span class="star">d</span>
+                            - the first day when you started coding
+                        </li>
+
+                        <li>
+                            <span class="unreached">d</span>
+                            - the day when you haven't reached your goal
+                        </li>
+
+                        <li>
+                            <span class="reached">d</span>
+                            - the day where you have reached your goal
+                        </li>
+
+                        <li>
+                            <span class="crushed">d</span>
+                            - the day where you have reached 2x your goal
+                        </li>
+
+                        <li>
+                            <span class="estimate">d</span>
+                            - the estimated day when you reach your goal if you keep the pace
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <footer>
+        <span>© Made with ❤️ by <a href="https://github.com/Tulis12">Tulis</a> 2026</span>
+        <span>MIT License</span>
+        <a href="https://github.com/Tulis12/WishAndCommit">GitHub project<a>
+                <span>Made for Stardance</span>
+    </footer>
+
+    <script>
+        let goal_name = localStorage.getItem("goal_name");
+        let goal_stardust = localStorage.getItem("goal_stardust");
+        let estimate_stardust = localStorage.getItem("estimate_stardust");
+        let counting_projects = localStorage.getItem("counting_projects");
+        let additional_stardust = localStorage.getItem("additional_stardust");
+        let minimum_daily_hours = localStorage.getItem("minimum_daily_minutes");
+
+        let update_today = document.getElementById("update_today");
+        let update_all_time = document.getElementById("update_all_time");
+
+        if (counting_projects == null) {
+            counting_projects = [];
+            localStorage.setItem(
+                "counting_projects",
+                JSON.stringify(counting_projects),
+            );
+        } else {
+            counting_projects = JSON.parse(counting_projects);
+        }
+
+        let input_goal_name = document.getElementById("goal_name");
+        let input_goal_stardust = document.getElementById("goal_stardust");
+        let input_estimate_stardust = document.getElementById("estimate_stardust");
+        let input_additional_stardust = document.getElementById("additional_stardust");
+        let input_minimum_daily_hours = document.getElementById(
+            "minimum_daily_minutes",
+        );
+
+        let info = document.querySelector(".info");
+
+        let input_hackatime_id = document.getElementById("hackatime_id");
+        let input_hackatime_url = document.getElementById("hackatime_url");
+
+        let estimated_hours = document.getElementById("estimated_hours");
+
+        if (goal_name == null) {
+            goal_name = "random piece of paper from hq";
+            localStorage.setItem("goal_name", goal_name);
+            console.log(goal_name);
+        }
+
+        if (goal_stardust == null) {
+            goal_stardust = 39;
+            localStorage.setItem("goal_stardust", goal_stardust);
+        }
+
+        if (estimate_stardust == null) {
+            estimate_stardust = 15;
+            localStorage.setItem("estimate_stardust", estimate_stardust);
+        }
+
+        if (additional_stardust == null) {
+            additional_stardust = 0;
+            localStorage.setItem("additional_stardust", additional_stardust);
+        }
+
+        if (minimum_daily_hours == null) {
+            minimum_daily_hours = 0.25;
+            localStorage.setItem("minimum_daily_minutes", 15);
+        } else {
+            minimum_daily_hours = minimum_daily_hours / 60;
+        }
+
+        let hackatime_url =
+            localStorage.getItem("hackatime_url") != null
+                ? localStorage.getItem("hackatime_url")
+                : "https://hackatime.hackclub.com/";
+
+        input_hackatime_url.value = hackatime_url;
+
+        let hackatime_id = localStorage.getItem("hackatime_id");
+
+        if (hackatime_id != null) {
+            update_today.disabled = false;
+            update_all_time.disabled = false;
+
+            input_hackatime_id.value = hackatime_id;
+        } else {
+            info.innerText = "Please input your slack ID!";
+        }
+
+        function sleep(ms) {
+            return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+
+        function formatHours(hours) {
+            const full_hours = Math.floor(hours);
+            const minutes = ((hours - full_hours) * 60).toFixed(0);
+
+            return `${full_hours}h ${minutes}min`;
+        }
+
+        let data = JSON.parse(localStorage.getItem("fetched_data"));
+        if (data == null) data = [];
+
+        async function fetchAllData() {
+            data = [];
+
+            const startDate = new Date("2026-06-01T00:00:00Z");
+            const today = new Date();
+
+            const days_from_start = Math.ceil(
+                (today - startDate) / (1000 * 60 * 60 * 24),
+            );
+
+            let d = 0;
+
+            const current = new Date(startDate);
+
+            while (current <= today) {
+                info.innerText = `Fetching: ${d + 1}/${days_from_start}`;
+
+                const startOfDay = new Date(current);
+                startOfDay.setUTCHours(0, 0, 0, 0);
+
+                const endOfDay = new Date(current);
+                endOfDay.setUTCHours(23, 59, 59, 999);
+
+                current.setUTCDate(current.getUTCDate() + 1);
+
+                let r = await fetch(
+                    `${hackatime_url}/api/summary?from=${startOfDay.toISOString().replace(".000Z", "Z")}&to=${endOfDay.toISOString().replace(".999Z", "Z")}&user_id=${hackatime_id}`,
+                );
+
+                data[d] = await r.json();
+                d++;
+
+                await sleep(100);
+            }
+
+            console.log(data);
+            localStorage.setItem("fetched_data", JSON.stringify(data));
+        }
+
+        async function fetchData() {
+            if (data == null || data.length == 0) {
+                estimated_hours.value = "fetchuje dane...";
+
+                await fetchAllData();
+                return;
+            }
+
+            let startDate = new Date(data[data.length - 1]["from"]);
+            startDate.setUTCDate(startDate.getUTCDate() + 1);
+
+            const today = new Date();
+            let d = data.length;
+
+            let change = false;
+
+            const current = new Date(startDate);
+
+            while (current <= today) {
+                change = true;
+                estimated_hours.value = "fetchuje dane: " + d;
+
+                const startOfDay = new Date(current);
+                startOfDay.setUTCHours(0, 0, 0, 0);
+
+                const endOfDay = new Date(current);
+                endOfDay.setUTCHours(23, 59, 59, 999);
+
+                current.setUTCDate(current.getUTCDate() + 1);
+
+                let r = await fetch(
+                    `${hackatime_url}/api/summary?from=${startOfDay.toISOString().replace(".000Z", "Z")}&to=${endOfDay.toISOString().replace(".999Z", "Z")}&user_id=${hackatime_id}`,
+                );
+
+                data[d] = await r.json();
+                d++;
+
+                await sleep(100);
+            }
+
+            if (change) {
+                localStorage.setItem("fetched_data", JSON.stringify(data));
+            }
+        }
+
+        if (hackatime_id != null) {
+            fetchData().then(() => {
+                loadData();
+            });
+        } else {
+            loadData();
+        }
+
+        async function updateToday() {
+            const startOfDay = new Date();
+            startOfDay.setUTCHours(0, 0, 0, 0);
+
+            const endOfDay = new Date();
+            endOfDay.setUTCHours(23, 59, 59, 999);
+
+            let r = await fetch(
+                `${hackatime_url}/api/summary?from=${startOfDay.toISOString().replace(".000Z", "Z")}&to=${endOfDay.toISOString().replace(".999Z", "Z")}&user_id=${hackatime_id}`,
+            );
+
+            data[data.length - 1] = await r.json();
+            localStorage.setItem("fetched_data", JSON.stringify(data));
+            window.location.reload();
+        }
+
+        function loadData() {
+            let total_hours = 0;
+            let projects = {};
+
+            let found_with_code = false;
+            let start_date = null;
+            let days_since_start_to_end;
+            let daily_goal;
+
+            let pace = 0;
+            let days_pace = 0;
+
+            for (let day of data) {
+                let day_sum = 0;
+                let this_day_date = new Date(day["from"]);
+
+                for (let project of day["projects"]) {
+                    if (!found_with_code) {
+                        found_with_code = true;
+                        start_date = this_day_date;
+
+                        let start_month = String(
+                            this_day_date.getUTCMonth() + 1,
+                        ).padStart(2, "0");
+                        let start_day = String(this_day_date.getUTCDate()).padStart(
+                            2,
+                            "0",
+                        );
+
+                        const target = new Date(this_day_date.getFullYear(), 9, 30); // end of stardance
+                        days_since_start_to_end = Math.ceil(
+                            (target - start_date) / (1000 * 60 * 60 * 24),
+                        );
+
+                        daily_goal =
+                            (goal_stardust - additional_stardust) /
+                            (days_since_start_to_end * estimate_stardust);
+
+                        document
+                            .getElementById(`${start_month}-${start_day}`)
+                            .classList.add("star");
+                    }
+
+                    let project_name = project["key"];
+
+                    if (counting_projects.includes(project_name)) {
+                        day_sum += project["total"] / 3600;
+                    }
+
+                    if (!(project_name in projects)) {
+                        projects[project_name] = {
+                            counting: counting_projects.includes(project_name),
+                            hours: project["total"] / 3600,
+                        };
+
+                        continue;
+                    }
+
+                    projects[project_name]["hours"] =
+                        projects[project_name]["hours"] + project["total"] / 3600;
+                }
+
+                let m = String(this_day_date.getUTCMonth() + 1).padStart(2, "0");
+                let d = String(this_day_date.getUTCDate()).padStart(2, "0");
+
+                if (start_date != null && this_day_date > start_date) {
+                    let delta = day_sum - daily_goal;
+
+                    if (delta < 0) {
+                        document.getElementById(`${m}-${d}`).classList.add("unreached");
+                    }
+
+                    if (delta > 0) {
+                        pace += day_sum;
+                        days_pace++;
+                        console.log(daily_goal, day_sum);
+                        document.getElementById(`${m}-${d}`).classList.add("reached");
+                    }
+
+                    if (delta > daily_goal) {
+                        console.log(daily_goal, day_sum);
+                        document.getElementById(`${m}-${d}`).classList.add("crushed");
+                    }
+                }
+            }
+
+            let projects_div = document.querySelector(".projects");
+
+            for (let project in projects) {
+                let project_div = document.createElement("label");
+                let checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.checked = projects[project]["counting"];
+
+                if (projects[project]["counting"]) {
+                    total_hours += projects[project]["hours"];
+                }
+
+                project_div.innerText = `${project} ${formatHours(projects[project]["hours"])}`;
+                project_div.appendChild(checkbox);
+
+                checkbox.onchange = () => {
+                    if (checkbox.checked) {
+                        counting_projects.push(project);
+
+                        localStorage.setItem(
+                            "counting_projects",
+                            JSON.stringify(counting_projects),
+                        );
+                        window.location.reload();
+                    } else {
+                        let index = counting_projects.indexOf(project);
+
+                        if (index !== -1) {
+                            counting_projects.splice(index, 1);
+                        }
+
+                        localStorage.setItem(
+                            "counting_projects",
+                            JSON.stringify(counting_projects),
+                        );
+                        window.location.reload();
+                    }
+                };
+
+                projects_div.appendChild(project_div);
+            }
+
+            input_goal_name.value = goal_name;
+            input_goal_stardust.value = goal_stardust;
+            input_estimate_stardust.value = estimate_stardust;
+            input_additional_stardust.value = additional_stardust;
+            input_minimum_daily_hours.value = Math.round(minimum_daily_hours * 60);
+
+            const today = new Date();
+            const target = new Date(today.getFullYear(), 9, 30); // end of stardance
+
+            const days_to_end = Math.ceil((target - today) / (1000 * 60 * 60 * 24)); // because in seconds
+
+            let stardust_left =
+                goal_stardust - additional_stardust - total_hours * estimate_stardust;
+            let hours_left = Math.ceil(stardust_left / estimate_stardust);
+
+            if (hours_left < 0) {
+                estimated_hours.innerText = "You have reached your goal! Congrats!";
+                return;
+            }
+
+            let hours_per_day = hours_left / days_to_end;
+
+            if (days_pace > 0) {
+                pace = pace / days_pace;
+
+                let dd = new Date();
+                dd.setDate(
+                    dd.getDate() +
+                    Math.ceil(stardust_left / (pace * estimate_stardust)),
+                );
+
+                let m = String(dd.getUTCMonth() + 1).padStart(2, "0");
+                if (m <= 9) {
+                    let d = String(dd.getUTCDate()).padStart(2, "0");
+                    document.getElementById(`${m}-${d}`).classList.add("estimate");
+                } else {
+                    info.innerText = "You won't reach your goal at this pace!";
+                }
+            }
+
+            if (hours_per_day < minimum_daily_hours) {
+                estimated_hours.innerText = `Code for minimal amount of time: ${formatHours(minimum_daily_hours)} for: ${hours_left / minimum_daily_hours} days \nOr finish in: ${Math.ceil(stardust_left / (pace * estimate_stardust))} days at your pace: ${formatHours(pace)}`;
+                return;
+            }
+
+            estimated_hours.innerText = `To reach your goal: ${formatHours(stardust_left / estimate_stardust)} \nPer day: ${formatHours(hours_per_day)} \nYour pace: ${formatHours(pace)} \nDays till finish: ${Math.ceil(stardust_left / (pace * estimate_stardust))} (at this pace)`;
+        }
+
+        function saveControls() {
+            localStorage.setItem("goal_name", input_goal_name.value);
+            localStorage.setItem("goal_stardust", input_goal_stardust.value);
+            localStorage.setItem("estimate_stardust", input_estimate_stardust.value);
+
+            localStorage.setItem(
+                "additional_stardust",
+                input_additional_stardust.value,
+            );
+            localStorage.setItem(
+                "minimum_daily_minutes",
+                input_minimum_daily_hours.value,
+            );
+
+            localStorage.setItem("hackatime_id", input_hackatime_id.value);
+            localStorage.setItem("hackatime_url", input_hackatime_url.value);
+
+            window.location.reload();
+        }
+    </script>
+</body>
+
+</html>
