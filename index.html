@@ -673,12 +673,12 @@
         let estimated_hours = document.getElementById("estimated_hours");
 
         if (goal_name == null) {
-            goal_name = "random piece of paper from hq";
+            goal_name = "GitHub Frisbee";
             localStorage.setItem("goal_name", goal_name);
         }
 
         if (goal_stardust == null) {
-            goal_stardust = 39;
+            goal_stardust = 165;
             localStorage.setItem("goal_stardust", goal_stardust);
         }
 
@@ -714,7 +714,7 @@
 
             input_hackatime_id.value = hackatime_id;
         } else {
-            info.innerText = "Please input your slack ID!";
+            info.innerHTML = "Please input your slack ID/hackclub ID! <sup><a href='https://github.com/Tulis12/WishAndCommit#Where can I get my ID?'>?</a></sup>";
             info.classList.add("highlight");
         }
 
