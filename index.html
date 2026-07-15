@@ -11,6 +11,7 @@
 
         body {
             font-family: "Roboto", Arial, Helvetica, sans-serif;
+            margin: 0;
         }
 
         .info.highlight {
@@ -159,6 +160,11 @@
         .unreached {
             border-radius: 100%;
             background-color: #c1bec4;
+        }
+
+        .unreached-activity {
+            border-radius: 100%;
+            background-color: darkorange !important;
         }
 
         .reached {
@@ -596,6 +602,11 @@
                         </li>
 
                         <li>
+                            <span class="unreached-activity">d</span>
+                            - the day when you haven't reached your goal and you had other coding activity
+                        </li>
+
+                        <li>
                             <span class="reached">d</span>
                             - the day where you have reached your goal
                         </li>
@@ -664,7 +675,6 @@
         if (goal_name == null) {
             goal_name = "random piece of paper from hq";
             localStorage.setItem("goal_name", goal_name);
-            console.log(goal_name);
         }
 
         if (goal_stardust == null) {
@@ -757,7 +767,6 @@
                 await sleep(100);
             }
 
-            console.log(data);
             localStorage.setItem("fetched_data", JSON.stringify(data));
         }
 
@@ -842,7 +851,11 @@
             let pace = 0;
             let days_pace = 0;
 
+            let reach = true;
+            let not_reached_hours = 0;
+
             for (let day of data) {
+                let overall_day_code = 0;
                 let day_sum = 0;
                 let this_day_date = new Date(day["from"]);
 
@@ -859,7 +872,7 @@
                             "0",
                         );
 
-                        const target = new Date(this_day_date.getFullYear(), 9, 30); // end of stardance
+                        const target = new Date(this_day_date.getFullYear(), 8, 30); // end of stardance
                         days_since_start_to_end = Math.ceil(
                             (target - start_date) / (1000 * 60 * 60 * 24),
                         );
@@ -877,6 +890,10 @@
 
                     if (counting_projects.includes(project_name)) {
                         day_sum += project["total"] / 3600;
+                    }
+
+                    if (project_name != null && project_name.trim() !== "") {
+                        overall_day_code += project["total"] / 3600;
                     }
 
                     if (!(project_name in projects)) {
@@ -897,21 +914,39 @@
 
                 if (start_date != null && this_day_date > start_date) {
                     let delta = day_sum - daily_goal;
+                    let day_calendar = document.getElementById(`${m}-${d}`);
+                    day_calendar.title = formatHours(day_sum) + " / " + formatHours(daily_goal);
+
+
+                    console.log(`${m}-${d} - ${formatHours(day_sum)} - ${formatHours(overall_day_code)}`);
+
 
                     if (delta < 0) {
-                        document.getElementById(`${m}-${d}`).classList.add("unreached");
+                        day_calendar.classList.add("unreached");
+                        days_since_start_to_end--;
+
+                        not_reached_hours += day_sum;
+
+                        daily_goal =
+                            (goal_stardust - additional_stardust - not_reached_hours * estimate_stardust) /
+                            (days_since_start_to_end * estimate_stardust);
+                    }
+
+                    if (overall_day_code > minimum_daily_hours) {
+                        pace += day_sum;
+                        days_pace++;
+
+                        if (delta < 0) {
+                            day_calendar.classList.add("unreached-activity");
+                        }
                     }
 
                     if (delta > 0) {
-                        pace += day_sum;
-                        days_pace++;
-                        console.log(daily_goal, day_sum);
-                        document.getElementById(`${m}-${d}`).classList.add("reached");
+                        day_calendar.classList.add("reached");
                     }
 
                     if (delta > daily_goal) {
-                        console.log(daily_goal, day_sum);
-                        document.getElementById(`${m}-${d}`).classList.add("crushed");
+                        day_calendar.classList.add("crushed");
                     }
                 }
             }
@@ -965,7 +1000,7 @@
             input_minimum_daily_hours.value = Math.round(minimum_daily_hours * 60);
 
             const today = new Date();
-            const target = new Date(today.getFullYear(), 9, 30); // end of stardance
+            const target = new Date(today.getFullYear(), 8, 30); // end of stardance
 
             const days_to_end = Math.ceil((target - today) / (1000 * 60 * 60 * 24)); // because in seconds
 
@@ -978,7 +1013,7 @@
                 return;
             }
 
-            let hours_per_day = hours_left / days_to_end;
+            let hours_per_day = daily_goal;
 
             if (days_pace > 0) {
                 pace = pace / days_pace;
@@ -990,20 +1025,22 @@
                 );
 
                 let m = String(dd.getUTCMonth() + 1).padStart(2, "0");
-                if (m <= 9) {
+                if (![6, 7, 8, 9].includes(dd.getUTCMonth() + 1)) {
+                    info.innerText = "You won't reach your goal at this pace!";
+                    reach = false;
+                } else {
+                    console.log(m)
                     let d = String(dd.getUTCDate()).padStart(2, "0");
                     document.getElementById(`${m}-${d}`).classList.add("estimate");
-                } else {
-                    info.innerText = "You won't reach your goal at this pace!";
                 }
             }
 
             if (hours_per_day < minimum_daily_hours) {
-                estimated_hours.innerText = `Code for minimal amount of time: ${formatHours(minimum_daily_hours)} for: ${hours_left / minimum_daily_hours} days \nOr finish in: ${Math.ceil(stardust_left / (pace * estimate_stardust))} days at your pace: ${formatHours(pace)}`;
+                estimated_hours.innerText = (reach ? "" : "You won't reach your goal in time with this pace! \n") + `Code for minimal amount of time: ${formatHours(minimum_daily_hours)} for: ${hours_left / minimum_daily_hours} days \nOr finish in: ${Math.ceil(stardust_left / (pace * estimate_stardust))} days at your pace: ${formatHours(pace)} `;
                 return;
             }
 
-            estimated_hours.innerText = `To reach your goal: ${formatHours(stardust_left / estimate_stardust)} \nPer day: ${formatHours(hours_per_day)} \nYour pace: ${formatHours(pace)} \nDays till finish: ${Math.ceil(stardust_left / (pace * estimate_stardust))} (at this pace)`;
+            estimated_hours.innerText = (reach ? "" : "You won't reach your goal in time with this pace! \n") + `To reach your goal: ${formatHours(stardust_left / estimate_stardust)} \nPer day: ${formatHours(hours_per_day)} \nYour pace: ${formatHours(pace)} \nDays till finish: ${Math.ceil(stardust_left / (pace * estimate_stardust))} (at this pace)`;
         }
 
         function saveControls() {
