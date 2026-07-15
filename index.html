@@ -881,9 +881,10 @@
                             (goal_stardust - additional_stardust) /
                             (days_since_start_to_end * estimate_stardust);
 
-                        document
-                            .getElementById(`${start_month}-${start_day}`)
-                            .classList.add("star");
+                        let start_day_star = document.getElementById(`${start_month}-${start_day}`);
+
+                        start_day_star.classList.add("star");
+                        start_day_star.title = "The day that you started coding any project";
                     }
 
                     let project_name = project["key"];
